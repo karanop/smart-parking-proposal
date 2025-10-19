@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Faculty Parking System Proposal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Tech Professional -->
+    <!-- Application Structure Plan: A top-down, single-page narrative structure with a sticky navigation bar allows users to either scroll through the proposal logically or jump directly to sections of interest (Problem, Solution, Architecture, Tech, Roadmap). This is more intuitive than a static document, guiding stakeholders from the 'why' (problem) to the 'how' (solution/tech) and 'when' (roadmap). Interactive elements like a visual workflow and a Gantt chart for the timeline are used to make complex information digestible and engaging, facilitating quicker understanding and buy-in. -->
+    <!-- Visualization & Content Choices: 
+        1. Problem Statement -> Goal: Compare/Inform -> Viz: Bar Chart -> Interaction: Hover tooltips -> Justification: Visually quantifies the qualitative problems (e.g., wasted time, congestion) to make the impact more immediate and compelling than a bulleted list. Library: Chart.js/Canvas.
+        2. Proposed Workflow -> Goal: Organize/Inform -> Viz: HTML/CSS Process Flow Diagram -> Interaction: Click to highlight and view step details -> Justification: Transforms a list into an intuitive, step-by-step visual journey, clarifying the system's operation at a glance. Library: Vanilla JS + Tailwind.
+        3. Implementation Phases -> Goal: Show Change/Timeline -> Viz: Horizontal Bar Chart (Gantt-style) -> Interaction: Hover tooltips for phase details -> Justification: Provides a clear, professional visualization of the project's timeline, making the 14-week plan easy to understand and track. Library: Chart.js/Canvas.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .process-step {
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            cursor: pointer;
+        }
+        .process-step.active {
+            background-color: #3b82f6;
+            border-color: #2563eb;
+            color: white;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-blue-600">Smart Parking Proposal</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#overview" class="nav-link font-medium pb-1">Overview</a>
+                <a href="#problem" class="nav-link font-medium pb-1">The Problem</a>
+                <a href="#solution" class="nav-link font-medium pb-1">Our Solution</a>
+                <a href="#architecture" class="nav-link font-medium pb-1">Architecture</a>
+                <a href="#tech-stack" class="nav-link font-medium pb-1">Technology</a>
+                <a href="#roadmap" class="nav-link font-medium pb-1">Roadmap</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden p-2 rounded-md hover:bg-slate-100">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+             <a href="#overview" class="block py-2 text-center nav-link font-medium">Overview</a>
+             <a href="#problem" class="block py-2 text-center nav-link font-medium">The Problem</a>
+             <a href="#solution" class="block py-2 text-center nav-link font-medium">Our Solution</a>
+             <a href="#architecture" class="block py-2 text-center nav-link font-medium">Architecture</a>
+             <a href="#tech-stack" class="block py-2 text-center nav-link font-medium">Technology</a>
+             <a href="#roadmap" class="block py-2 text-center nav-link font-medium">Roadmap</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12">
+
+        <section id="overview" class="mb-16 md:mb-24 text-center scroll-mt-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">A Smarter, Seamless Parking Experience for Faculty</h2>
+            <p class="max-w-3xl mx-auto text-lg text-slate-600">
+                This proposal outlines a cost-effective, automated Smart Faculty Parking Management System. By leveraging computer vision and a dedicated mobile app, we can guarantee exclusive access for faculty, optimize parking space usage, and eliminate the congestion and frustration caused by the current system. This project is a practical application of modern technology to enhance campus life.
+            </p>
+        </section>
+
+        <section id="problem" class="mb-16 md:mb-24 scroll-mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900">The Challenge: An Inefficient System</h2>
+                <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600">
+                    The current system of reserved faculty parking is failing. Unauthorized vehicles create a chain reaction of issues that impact faculty time, campus safety, and resource management. This section visualizes the key problems our solution addresses.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-6">
+                    <div class="flex items-start">
+                        <span class="text-blue-500 text-2xl mr-4">&#9200;</span>
+                        <div>
+                            <h3 class="font-semibold text-xl mb-1">Inconvenience & Wasted Time</h3>
+                            <p class="text-slate-600">Faculty members are forced to waste valuable time searching for parking spots, causing delays and frustration.</p>
+                        </div>
+                    </div>
+                     <div class="flex items-start">
+                        <span class="text-blue-500 text-2xl mr-4">&#128664;</span>
+                        <div>
+                            <h3 class="font-semibold text-xl mb-1">Campus Congestion & Safety</h3>
+                            <p class="text-slate-600">Vehicles parked improperly on internal roads obstruct traffic flow and can create significant safety hazards for pedestrians and other drivers.</p>
+                        </div>
+                    </div>
+                     <div class="flex items-start">
+                        <span class="text-blue-500 text-2xl mr-4">&#128274;</span>
+                        <div>
+                            <h3 class="font-semibold text-xl mb-1">Lack of Security & Control</h3>
+                            <p class="text-slate-600">With no automated enforcement, the system relies on manual oversight, which is inefficient and unable to prevent unauthorized parking effectively.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container h-64 md:h-96">
+                    <canvas id="problemChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" class="mb-16 md:mb-24 scroll-mt-24">
+             <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900">The Automated Workflow</h2>
+                <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600">
+                    Our solution automates the entire parking process, from entry to finding a spot. The system is designed to be seamless for faculty and requires minimal infrastructure. Click through the steps below to see how it works.
+                </p>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4 mb-8">
+                <div class="process-step flex-1 text-center border-2 border-slate-300 rounded-lg p-4 w-full" data-step="1">
+                    <div class="text-2xl font-bold text-blue-500 mb-2">1</div>
+                    <h3 class="font-semibold">Gate Access</h3>
+                </div>
+                <div class="text-slate-300 font-bold text-2xl hidden md:block">&rarr;</div>
+                <div class="process-step flex-1 text-center border-2 border-slate-300 rounded-lg p-4 w-full" data-step="2">
+                    <div class="text-2xl font-bold text-blue-500 mb-2">2</div>
+                    <h3 class="font-semibold">Verification</h3>
+                </div>
+                <div class="text-slate-300 font-bold text-2xl hidden md:block">&rarr;</div>
+                <div class="process-step flex-1 text-center border-2 border-slate-300 rounded-lg p-4 w-full" data-step="3">
+                    <div class="text-2xl font-bold text-blue-500 mb-2">3</div>
+                    <h3 class="font-semibold">Vacancy Detection</h3>
+                </div>
+                <div class="text-slate-300 font-bold text-2xl hidden md:block">&rarr;</div>
+                <div class="process-step flex-1 text-center border-2 border-slate-300 rounded-lg p-4 w-full" data-step="4">
+                    <div class="text-2xl font-bold text-blue-500 mb-2">4</div>
+                    <h3 class="font-semibold">Smart Guidance</h3>
+                </div>
+            </div>
+            <div id="solution-details" class="bg-white p-6 rounded-lg shadow-md min-h-[100px]">
+                <p class="text-slate-700 text-center text-lg">Select a step above to see details.</p>
+            </div>
+        </section>
+
+        <section id="architecture" class="mb-16 md:mb-24 scroll-mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900">System Architecture</h2>
+                <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600">
+                    The system is built on four primary modules that work together to deliver a seamless experience. Each component is designed for a specific function, from identifying vehicles to guiding them to an open spot.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="card bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-blue-600 mb-3">Access Control Unit</h3>
+                    <p class="text-slate-600 mb-4">Identifies vehicles via ANPR and controls the gate barrier.</p>
+                    <p class="text-sm text-slate-500"><span class="font-semibold">Hardware:</span> IP Camera, Boom Barrier</p>
+                    <p class="text-sm text-slate-500"><span class="font-semibold">Software:</span> ANPR Algorithm</p>
+                </div>
+                <div class="card bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-blue-600 mb-3">Vacancy Detection Unit</h3>
+                    <p class="text-slate-600 mb-4">Maintains a real-time map of available parking spots using overhead cameras.</p>
+                    <p class="text-sm text-slate-500"><span class="font-semibold">Hardware:</span> Wide-angle IP Cameras</p>
+                    <p class="text-sm text-slate-500"><span class="font-semibold">Software:</span> Computer Vision Model</p>
+                </div>
+                <div class="card bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-blue-600 mb-3">Backend & Database</h3>
+                    <p class="text-slate-600 mb-4">The central brain of the system, processing data and managing logic.</p>
+                     <p class="text-sm text-slate-500"><span class="font-semibold">Hardware:</span> Central Server (Cloud/On-prem)</p>
+                    <p class="text-sm text-slate-500"><span class="font-semibold">Software:</span> Database, API, Business Logic</p>
+                </div>
+                <div class="card bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-blue-600 mb-3">Faculty Mobile App</h3>
+                    <p class="text-slate-600 mb-4">The user interface for faculty to receive guidance and notifications.</p>
+                     <p class="text-sm text-slate-500"><span class="font-semibold">Platform:</span> Android & iOS</p>
+                    <p class="text-sm text-slate-500"><span class="font-semibold">Features:</span> Maps, Navigation, Notifications</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tech-stack" class="mb-16 md:mb-24 scroll-mt-24">
+             <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Technology Stack</h2>
+                <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600">
+                    We will use a modern, robust, and scalable technology stack to build the system, ensuring reliability and performance.
+                </p>
+            </div>
+            <div class="bg-white p-8 rounded-lg shadow-lg">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div>
+                        <h4 class="font-bold text-lg mb-2 text-slate-700">Computer Vision</h4>
+                        <p class="text-slate-600">Python with OpenCV, Tesseract, and YOLO models.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-2 text-slate-700">Backend</h4>
+                        <p class="text-slate-600">Node.js (Express) or Python (Flask/Django).</p>
+                    </div>
+                     <div>
+                        <h4 class="font-bold text-lg mb-2 text-slate-700">Database</h4>
+                        <p class="text-slate-600">PostgreSQL or MongoDB for flexible data storage.</p>
+                    </div>
+                     <div>
+                        <h4 class="font-bold text-lg mb-2 text-slate-700">Mobile App</h4>
+                        <p class="text-slate-600">React Native or Flutter for cross-platform support.</p>
+                    </div>
+                     <div>
+                        <h4 class="font-bold text-lg mb-2 text-slate-700">Communication</h4>
+                        <p class="text-slate-600">REST APIs and WebSockets for real-time updates.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="scroll-mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Implementation Roadmap</h2>
+                <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600">
+                    The project is planned over a 14-week timeline, divided into five distinct phases from setup to final deployment. This chart visualizes the duration and focus of each project phase.
+                </p>
+            </div>
+             <div class="chart-container h-96 md:h-[500px]">
+                <canvas id="roadmapChart"></canvas>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-800 text-white mt-16 md:mt-24">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p class="font-semibold text-lg">Smart Faculty Parking Management System</p>
+            <p class="text-slate-400 mt-2">Proposal Date: October 19, 2025</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.4
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if(link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            const problemChartCtx = document.getElementById('problemChart').getContext('2d');
+            new Chart(problemChartCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Wasted Time', 'Campus Congestion', 'Resource Inefficiency', 'Security Gaps'],
+                    datasets: [{
+                        label: 'Severity of Problem',
+                        data: [85, 75, 70, 90],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.6)',
+                            'rgba(37, 99, 235, 0.6)',
+                            'rgba(29, 78, 216, 0.6)',
+                            'rgba(30, 64, 175, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(37, 99, 235, 1)',
+                            'rgba(29, 78, 216, 1)',
+                            'rgba(30, 64, 175, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Key Issues Addressed by the System'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                             ticks: {
+                                callback: function(value) {
+                                    return value + '%'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            const solutionSteps = {
+                1: {
+                    title: 'Step 1: Automated Gate Access',
+                    description: 'A camera at the entrance uses Automatic Number Plate Recognition (ANPR) to identify an approaching vehicle.'
+                },
+                2: {
+                    title: 'Step 2: Verification',
+                    description: 'The recognized number plate is checked against a secure database of registered faculty vehicles. If authorized, the boom barrier opens automatically.'
+                },
+                 3: {
+                    title: 'Step 3: Real-time Vacancy Detection',
+                    description: 'Overhead cameras constantly monitor the parking lot, using computer vision to identify which spots are vacant in real time.'
+                },
+                 4: {
+                    title: 'Step 4: Smart Guidance & Navigation',
+                    description: 'The system assigns the nearest vacant spot and sends this information, along with the shortest path, to the faculty member\'s mobile app.'
+                }
+            };
+
+            const processSteps = document.querySelectorAll('.process-step');
+            const solutionDetailsContainer = document.getElementById('solution-details');
+
+            processSteps.forEach(step => {
+                step.addEventListener('click', () => {
+                    const stepNumber = step.dataset.step;
+                    
+                    processSteps.forEach(s => s.classList.remove('active'));
+                    step.classList.add('active');
+                    
+                    solutionDetailsContainer.innerHTML = `
+                        <h3 class="font-bold text-xl mb-2 text-slate-800">${solutionSteps[stepNumber].title}</h3>
+                        <p class="text-slate-600 text-lg">${solutionSteps[stepNumber].description}</p>
+                    `;
+                });
+            });
+
+            processSteps[0].click();
+
+            const roadmapChartCtx = document.getElementById('roadmapChart').getContext('2d');
+            new Chart(roadmapChartCtx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'Phase 1: Setup & Data Collection', 
+                        'Phase 2: Access Control Dev', 
+                        'Phase 3: Vacancy Detection Dev', 
+                        'Phase 4: Mobile App Dev', 
+                        'Phase 5: Integration & Deployment'
+                    ],
+                    datasets: [{
+                        label: 'Weeks',
+                        data: [
+                            [0, 2],
+                            [2, 5],
+                            [5, 8],
+                            [8, 12],
+                            [12, 14]
+                        ],
+                        backgroundColor: [
+                            'rgba(34, 211, 238, 0.6)',
+                            'rgba(59, 130, 246, 0.6)',
+                            'rgba(139, 92, 246, 0.6)',
+                            'rgba(234, 179, 8, 0.6)',
+                            'rgba(34, 197, 94, 0.6)'
+                        ],
+                         borderColor: [
+                            'rgba(34, 211, 238, 1)',
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(139, 92, 246, 1)',
+                            'rgba(234, 179, 8, 1)',
+                            'rgba(34, 197, 94, 1)'
+                        ],
+                        borderWidth: 1,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const start = context.raw[0];
+                                    const end = context.raw[1];
+                                    const duration = end - start;
+                                    return `Weeks: ${start} to ${end} (${duration} weeks)`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            min: 0,
+                            max: 14,
+                            title: {
+                                display: true,
+                                text: 'Project Timeline (Weeks)'
+                            }
+                        },
+                        y: {
+                           ticks: {
+                                autoSkip: false,
+                                callback: function(value, index, values) {
+                                    const label = this.getLabelForValue(value);
+                                    if (label.length > 20) {
+                                        return label.split(' ').reduce((acc, word) => {
+                                            if (acc.length === 0 || acc[acc.length - 1].length + word.length > 20) {
+                                                acc.push(word);
+                                            } else {
+                                                acc[acc.length - 1] += ' ' + word;
+                                            }
+                                            return acc;
+                                        }, []);
+                                    }
+                                    return label;
+                                }
+                           }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
